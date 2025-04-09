@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enciclopedia Chimica per Materie</title>
+    <style>
+        :root {
+            --primary: #0F172A;
+            --secondary: #1E293B;
+            --accent: #7C3AED;
+            --neon: #10B981;
+            --text: #F8FAFC;
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 0;
+            margin: 0;
+        }
+
+        .header {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+        }
+
+        .materia-section {
+            margin: 2rem auto;
+            max-width: 1200px;
+            padding: 0 1rem;
+        }
+
+        .materia-title {
+            color: var(--neon);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .article-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon);
+        }
+
+        .article-title {
+            color: var(--neon);
+            margin-top: 0;
+        }
+
+        .article-desc {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--accent), var(--neon));
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <h1>Enciclopedia Chimica</h1>
+        <p>Organizzata per materie</p>
+    </div>
+
+    <!-- Sezione Chimica Generale -->
+    <section class="materia-section">
+        <h2 class="materia-title">🧪 Chimica Generale</h2>
+        <div class="articles-grid">
+            <article class="article-card">
+                <h3 class="article-title">Struttura Atomica</h3>
+                <p class="article-desc">Teoria atomica moderna e modelli atomici</p>
+                <a href="#struttura-atomica" class="btn">Approfondisci</a>
+            </article>
+
+            <article class="article-card">
+                <h3 class="article-title">Tavola Periodica</h3>
+                <p class="article-desc">Organizzazione e proprietà periodiche</p>
+                <a href="#tavola-periodica" class="btn">Approfondisci</a>
+            </article>
+
+            <article class="article-card">
+                <h3 class="article-title">Legami Chimici</h3>
+                <p class="article-desc">Ionici, covalenti e metallici</p>
+                <a href="#legami-chimici" class="btn">Approfondisci</a>
+            </article>
+        </div>
+    </section>
+
+    <!-- Sezione Fisica -->
+    <section class="materia-section">
+        <h2 class="materia-title">⚛️ Fisica</h2>
+        <div class="articles-grid">
+            <article class="article-card">
+                <h3 class="article-title">Termodinamica</h3>
+                <p class="article-desc">Leggi della termodinamica chimica</p>
+                <a href="#termodinamica" class="btn">Approfondisci</a>
+            </article>
+
+            <article class="article-card">
+                <h3 class="article-title">Stati della Materia</h3>
+                <p class="article-desc">Solidi, liquidi, gas e plasmi</p>
+                <a href="#stati-materia" class="btn">Approfondisci</a>
+            </article>
+
+            <article class="article-card">
+                <h3 class="article-title">Fluidi Non Newtoniani</h3>
+                <p class="article-desc">Proprietà e comportamenti speciali</p>
+                <a href="#fluidi-non-newtoniani" class="btn">Approfondisci</a>
+            </article>
+        </div>
+    </section>
+
+    <!-- Sezione Matematica/Stechiometria -->
+    <section class="materia-section">
+        <h2 class="materia-title">🧮 Stechiometria</h2>
+        <div class="articles-grid">
+            <article class="article-card">
+                <h3 class="article-title">Bilanciamento Reazioni</h3>
+                <p class="article-desc">Metodo redox e conservazione massa</p>
+                <a href="#bilanciamento" class="btn">Approfondisci</a>
+            </article>
+
+            <article class="article-card">
+                <h3 class="article-title">Calcoli Stechiometrici</h3>
+                <p class="article-desc">Moli, rapporti e resa teorica</p>
+                <a href="#calcoli-stechiometrici" class="btn">Approfondisci</a>
+            </article>
+
+            <article class="article-card">
+                <h3 class="article-title">Soluzioni</h3>
+                <p class="article-desc">Molarità e diluizioni</p>
+                <a href="#soluzioni" class="btn">Approfondisci</a>
+            </article>
+        </div>
+    </section>
+
+    <!-- Sezione Laboratorio -->
+    <section class="materia-section">
+        <h2 class="materia-title">🔬 Laboratorio</h2>
+        <div class="articles-grid">
+            <article class="article-card">
+                <h3 class="article-title">Sicurezza</h3>
+                <p class="article-desc">Norme e dispositivi di protezione</p>
+                <a href="#sicurezza" class="btn">Approfondisci</a>
+            </article>
+
+            <article class="article-card">
+                <h3 class="article-title">Strumentazione</h3>
+                <p class="article-desc">Becher, pipette, spettrofotometri</p>
+                <a href="#strumentazione" class="btn">Approfondisci</a>
+            </article>
+
+            <article class="article-card">
+                <h3 class="article-title">Esperimenti Base</h3>
+                <p class="article-desc">Titolazioni, sintesi, decomposizioni</p>
+                <a href="#esperimenti" class="btn">Approfondisci</a>
+            </article>
+        </div>
+    </section>
+
+    <script>
+        // Aggiungi qui gli script per la navigazione
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                // Implementa la logica per mostrare i contenuti dettagliati
+                console.log('Apri articolo:', this.getAttribute('href'));
+            });
+        });
+    </script>
+</body>
+</html>
