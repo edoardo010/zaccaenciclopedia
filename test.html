@@ -3,206 +3,1312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enciclopedia Chimica per Materie</title>
+    <title>Quiz Interattivo con Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary: #0F172A;
-            --secondary: #1E293B;
-            --accent: #7C3AED;
-            --neon: #10B981;
-            --text: #F8FAFC;
-            --radius: 16px;
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --success-color: #4ad66d;
+            --error-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #adb5bd;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--primary);
-            color: var(--text);
-            line-height: 1.7;
-            padding: 0;
-            margin: 0;
+            background-color: #f0f2f5;
+            color: var(--dark-color);
+            line-height: 1.6;
         }
 
-        .header {
-            text-align: center;
-            padding: 3rem 1rem;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-        }
-
-        .materia-section {
-            margin: 2rem auto;
+        .container {
             max-width: 1200px;
+            margin: 2rem auto;
             padding: 0 1rem;
         }
 
-        .materia-title {
-            color: var(--neon);
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
+        /* Stili comuni */
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+        }
+
+        h2 {
             font-size: 1.8rem;
         }
 
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+        h3 {
+            font-size: 1.4rem;
         }
 
-        .article-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .article-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--neon);
-        }
-
-        .article-title {
-            color: var(--neon);
-            margin-top: 0;
-        }
-
-        .article-desc {
-            color: rgba(255, 255, 255, 0.7);
+        p {
+            margin-bottom: 1rem;
         }
 
         .btn {
-            background: linear-gradient(45deg, var(--accent), var(--neon));
-            color: white;
+            padding: 0.8rem 1.5rem;
             border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 50px;
+            border-radius: 8px;
+            font-weight: 500;
             cursor: pointer;
-            margin-top: 1rem;
-            display: inline-block;
-            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: #e0e7ff;
+        }
+
+        .btn-danger {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #d1145a;
+        }
+
+        .btn-icon {
+            margin-right: 0.5rem;
+        }
+
+        /* Homepage */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+            border: 3px solid transparent;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .topic-icon {
+            font-size: 3rem;
+            margin: 1.5rem 0;
+            color: var(--primary-color);
+        }
+
+        /* Quiz Container */
+        .quiz-container, .results-container, .admin-container {
+            display: none;
+        }
+
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .question-container {
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .option {
+            background-color: var(--light-color);
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: var(--accent-color);
+            background-color: #e9f7fe;
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background-color: #e0e7ff;
+        }
+
+        .option.correct {
+            border-color: var(--success-color);
+            background-color: #e6f7eb;
+        }
+
+        .option.incorrect {
+            border-color: var(--error-color);
+            background-color: #fde8ef;
+        }
+
+        .option input {
+            margin-right: 1rem;
+            accent-color: var(--primary-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        /* Results Container */
+        .results-container .score {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .progress-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .progress-circle svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-circle circle {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .progress-bg {
+            stroke: #e9ecef;
+        }
+
+        .progress-fill {
+            stroke: var(--primary-color);
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .feedback-item {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-item.correct {
+            background-color: #e6f7eb;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .feedback-item.incorrect {
+            background-color: #fde8ef;
+            border-left: 4px solid var(--error-color);
+        }
+
+        .feedback-icon {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+
+        .admin-btn {
+            background-color: var(--dark-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-menu {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            width: 250px;
+            display: none;
+        }
+
+        .admin-menu.show {
+            display: block;
+        }
+
+        .admin-menu-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .admin-menu-item:hover {
+            color: var(--primary-color);
+        }
+
+        .admin-section {
+            margin-bottom: 2rem;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .admin-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .admin-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Login Form */
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto;
+        }
+
+        /* Animazioni */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
         @media (max-width: 768px) {
-            .articles-grid {
+            .topics-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .admin-menu {
+                width: 200px;
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="header">
-        <h1>Enciclopedia Chimica</h1>
-        <p>Organizzata per materie</p>
+    <!-- Pannello Admin -->
+    <div class="admin-panel">
+        <button class="admin-btn" id="admin-toggle">
+            <i class="fas fa-cog"></i>
+        </button>
+        <div class="admin-menu" id="admin-menu">
+            <div class="admin-menu-item" onclick="showAdminPanel()">
+                <i class="fas fa-tachometer-alt btn-icon"></i> Pannello Admin
+            </div>
+            <div class="admin-menu-item" onclick="showLoginForm()">
+                <i class="fas fa-sign-in-alt btn-icon"></i> Login Insegnanti
+            </div>
+            <div class="admin-menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt btn-icon"></i> Logout
+            </div>
+        </div>
     </div>
 
-    <!-- Sezione Chimica Generale -->
-    <section class="materia-section">
-        <h2 class="materia-title">🧪 Chimica Generale</h2>
-        <div class="articles-grid">
-            <article class="article-card">
-                <h3 class="article-title">Struttura Atomica</h3>
-                <p class="article-desc">Teoria atomica moderna e modelli atomici</p>
-                <a href="#struttura-atomica" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Tavola Periodica</h3>
-                <p class="article-desc">Organizzazione e proprietà periodiche</p>
-                <a href="#tavola-periodica" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Legami Chimici</h3>
-                <p class="article-desc">Ionici, covalenti e metallici</p>
-                <a href="#legami-chimici" class="btn">Approfondisci</a>
-            </article>
+    <div class="container">
+        <!-- Homepage -->
+        <div id="homepage" class="card fade-in">
+            <div class="card-header">
+                <h1>Quiz Interattivo</h1>
+                <p>Scegli un argomento e metti alla prova le tue conoscenze</p>
+            </div>
+            <div class="card-body">
+                <div class="topics-grid">
+                    <div class="topic-card fade-in delay-1" onclick="startQuiz('storia')">
+                        <div class="topic-icon"><i class="fas fa-landmark"></i></div>
+                        <h3 class="topic-title">Storia</h3>
+                        <p class="topic-desc">Dall'antichità ai giorni nostri, metti alla prova la tua conoscenza storica</p>
+                    </div>
+                    <div class="topic-card fade-in delay-2" onclick="startQuiz('geografia')">
+                        <div class="topic-icon"><i class="fas fa-globe-europe"></i></div>
+                        <h3 class="topic-title">Geografia</h3>
+                        <p class="topic-desc">Capitali, bandiere, montagne e fiumi da riconoscere</p>
+                    </div>
+                    <div class="topic-card fade-in delay-1" onclick="startQuiz('scienza')">
+                        <div class="topic-icon"><i class="fas fa-atom"></i></div>
+                        <h3 class="topic-title">Scienza</h3>
+                        <p class="topic-desc">Fisica, chimica, biologia e scoperte scientifiche</p>
+                    </div>
+                    <div class="topic-card fade-in delay-2" onclick="startQuiz('arte')">
+                        <div class="topic-icon"><i class="fas fa-palette"></i></div>
+                        <h3 class="topic-title">Arte</h3>
+                        <p class="topic-desc">Pittori, opere, movimenti artistici e storia dell'arte</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
 
-    <!-- Sezione Fisica -->
-    <section class="materia-section">
-        <h2 class="materia-title">⚛️ Fisica</h2>
-        <div class="articles-grid">
-            <article class="article-card">
-                <h3 class="article-title">Termodinamica</h3>
-                <p class="article-desc">Leggi della termodinamica chimica</p>
-                <a href="#termodinamica" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Stati della Materia</h3>
-                <p class="article-desc">Solidi, liquidi, gas e plasmi</p>
-                <a href="#stati-materia" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Fluidi Non Newtoniani</h3>
-                <p class="article-desc">Proprietà e comportamenti speciali</p>
-                <a href="#fluidi-non-newtoniani" class="btn">Approfondisci</a>
-            </article>
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="quiz-container card">
+            <div class="card-header">
+                <h2 id="quiz-title">Quiz</h2>
+            </div>
+            <div class="card-body">
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span id="progress-text">Domanda 1 di 5</span>
+                        <span id="timer">00:00</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress-bar"></div>
+                    </div>
+                </div>
+                
+                <div class="question-container">
+                    <div id="question-container"></div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button class="btn btn-outline" id="prev-btn" onclick="prevQuestion()">
+                        <i class="fas fa-arrow-left btn-icon"></i> Precedente
+                    </button>
+                    <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()">
+                        Successivo <i class="fas fa-arrow-right btn-icon"></i>
+                    </button>
+                    <button class="btn btn-primary" id="submit-btn" onclick="showResults()" style="display: none;">
+                        <i class="fas fa-check-circle btn-icon"></i> Termina Quiz
+                    </button>
+                </div>
+            </div>
         </div>
-    </section>
 
-    <!-- Sezione Matematica/Stechiometria -->
-    <section class="materia-section">
-        <h2 class="materia-title">🧮 Stechiometria</h2>
-        <div class="articles-grid">
-            <article class="article-card">
-                <h3 class="article-title">Bilanciamento Reazioni</h3>
-                <p class="article-desc">Metodo redox e conservazione massa</p>
-                <a href="#bilanciamento" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Calcoli Stechiometrici</h3>
-                <p class="article-desc">Moli, rapporti e resa teorica</p>
-                <a href="#calcoli-stechiometrici" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Soluzioni</h3>
-                <p class="article-desc">Molarità e diluizioni</p>
-                <a href="#soluzioni" class="btn">Approfondisci</a>
-            </article>
+        <!-- Results Container -->
+        <div id="results-container" class="results-container card">
+            <div class="card-header">
+                <h2>Risultati del Quiz</h2>
+            </div>
+            <div class="card-body">
+                <div class="score">
+                    <h3>Il tuo punteggio</h3>
+                    <div class="progress-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="progress-fill" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="progress-text" id="percentage-score">0%</div>
+                    </div>
+                    <div class="score-value" id="score-value">0/0</div>
+                    <p id="score-message">Messaggio di valutazione</p>
+                </div>
+                
+                <div id="feedback-container">
+                    <h3>Dettaglio risposte:</h3>
+                    <div id="feedback-list"></div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="goHome()">
+                        <i class="fas fa-home btn-icon"></i> Torna alla Home
+                    </button>
+                </div>
+            </div>
         </div>
-    </section>
 
-    <!-- Sezione Laboratorio -->
-    <section class="materia-section">
-        <h2 class="materia-title">🔬 Laboratorio</h2>
-        <div class="articles-grid">
-            <article class="article-card">
-                <h3 class="article-title">Sicurezza</h3>
-                <p class="article-desc">Norme e dispositivi di protezione</p>
-                <a href="#sicurezza" class="btn">Approfondisci</a>
-            </article>
+        <!-- Admin Container -->
+        <div id="admin-container" class="admin-container card">
+            <div class="card-header">
+                <h2><i class="fas fa-user-shield btn-icon"></i> Pannello Insegnanti</h2>
+            </div>
+            <div class="card-body">
+                <div id="admin-login" class="admin-section">
+                    <h3>Accesso Insegnanti</h3>
+                    <form id="login-form" onsubmit="adminLogin(event)">
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" id="username" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt btn-icon"></i> Accedi
+                        </button>
+                    </form>
+                </div>
 
-            <article class="article-card">
-                <h3 class="article-title">Strumentazione</h3>
-                <p class="article-desc">Becher, pipette, spettrofotometri</p>
-                <a href="#strumentazione" class="btn">Approfondisci</a>
-            </article>
+                <div id="admin-content" class="admin-section" style="display: none;">
+                    <h3>Gestione Quiz</h3>
+                    <div class="text-center" style="margin-bottom: 1.5rem;">
+                        <button class="btn btn-primary" onclick="showQuizManagement()">
+                            <i class="fas fa-tasks btn-icon"></i> Gestisci Quiz
+                        </button>
+                        <button class="btn btn-primary" onclick="showResultsManagement()">
+                            <i class="fas fa-chart-bar btn-icon"></i> Risultati Studenti
+                        </button>
+                    </div>
 
-            <article class="article-card">
-                <h3 class="article-title">Esperimenti Base</h3>
-                <p class="article-desc">Titolazioni, sintesi, decomposizioni</p>
-                <a href="#esperimenti" class="btn">Approfondisci</a>
-            </article>
+                    <!-- Gestione Quiz -->
+                    <div id="quiz-management">
+                        <h4>Seleziona Quiz da Modificare</h4>
+                        <select id="quiz-select" class="form-control" onchange="loadQuizForEditing()">
+                            <option value="">-- Seleziona un quiz --</option>
+                            <option value="storia">Storia</option>
+                            <option value="geografia">Geografia</option>
+                            <option value="scienza">Scienza</option>
+                            <option value="arte">Arte</option>
+                        </select>
+
+                        <div id="quiz-editor" style="margin-top: 2rem; display: none;">
+                            <h4>Editor Quiz</h4>
+                            <div id="questions-list"></div>
+                            <button class="btn btn-primary" onclick="addNewQuestion()" style="margin-top: 1rem;">
+                                <i class="fas fa-plus btn-icon"></i> Aggiungi Domanda
+                            </button>
+                            <button class="btn btn-primary" onclick="saveQuizChanges()" style="margin-top: 1rem;">
+                                <i class="fas fa-save btn-icon"></i> Salva Modifiche
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Gestione Risultati -->
+                    <div id="results-management" style="display: none;">
+                        <h4>Risultati degli Studenti</h4>
+                        <div class="form-group">
+                            <label for="results-quiz-select" class="form-label">Seleziona Quiz</label>
+                            <select id="results-quiz-select" class="form-control" onchange="loadQuizResults()">
+                                <option value="">-- Seleziona un quiz --</option>
+                                <option value="storia">Storia</option>
+                                <option value="geografia">Geografia</option>
+                                <option value="scienza">Scienza</option>
+                                <option value="arte">Arte</option>
+                            </select>
+                        </div>
+
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Studente</th>
+                                    <th>Punteggio</th>
+                                    <th>Data</th>
+                                    <th>Tempo</th>
+                                    <th>Dettagli</th>
+                                </tr>
+                            </thead>
+                            <tbody id="results-table">
+                                <!-- Risultati verranno caricati qui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
 
     <script>
-        // Aggiungi qui gli script per la navigazione
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                // Implementa la logica per mostrare i contenuti dettagliati
-                console.log('Apri articolo:', this.getAttribute('href'));
+        // Database dei quiz
+        let quizzes = {
+            storia: {
+                title: "Quiz di Storia",
+                icon: "fas fa-landmark",
+                questions: [
+                    {
+                        question: "In quale anno è caduto l'Impero Romano d'Occidente?",
+                        options: ["476 d.C.", "410 d.C.", "1453 d.C.", "312 d.C."],
+                        answer: 0,
+                        explanation: "L'Impero Romano d'Occidente cadde nel 476 d.C. quando Odoacre depose l'ultimo imperatore Romolo Augustolo."
+                    },
+                    {
+                        question: "Chi fu il primo presidente degli Stati Uniti?",
+                        options: ["Thomas Jefferson", "George Washington", "Abraham Lincoln", "John Adams"],
+                        answer: 1,
+                        explanation: "George Washington fu il primo presidente degli Stati Uniti, in carica dal 1789 al 1797."
+                    },
+                    {
+                        question: "In quale anno è iniziata la Prima Guerra Mondiale?",
+                        options: ["1914", "1918", "1939", "1905"],
+                        answer: 0,
+                        explanation: "La Prima Guerra Mondiale iniziò nel 1914 dopo l'assassinio dell'arciduca Francesco Ferdinando d'Austria."
+                    },
+                    {
+                        question: "Quale civiltà antica costruì le piramidi di Giza?",
+                        options: ["Greci", "Romani", "Egizi", "Maya"],
+                        answer: 2,
+                        explanation: "Le piramidi di Giza furono costruite dagli antichi Egizi come tombe per i faraoni."
+                    },
+                    {
+                        question: "In quale anno Cristoforo Colombo scoprì l'America?",
+                        options: ["1492", "1502", "1488", "1521"],
+                        answer: 0,
+                        explanation: "Cristoforo Colombo raggiunse le Americhe nel 1492, cercando una rotta occidentale per le Indie."
+                    }
+                ]
+            },
+            geografia: {
+                title: "Quiz di Geografia",
+                icon: "fas fa-globe-europe",
+                questions: [
+                    {
+                        question: "Qual è la capitale del Canada?",
+                        options: ["Toronto", "Vancouver", "Ottawa", "Montreal"],
+                        answer: 2,
+                        explanation: "Ottawa è la capitale del Canada, mentre Toronto è la città più grande."
+                    },
+                    {
+                        question: "Qual è il fiume più lungo del mondo?",
+                        options: ["Nilo", "Rio delle Amazzoni", "Mississippi", "Yangtze"],
+                        answer: 1,
+                        explanation: "Il Rio delle Amazzoni è considerato il fiume più lungo con circa 6.992 km."
+                    },
+                    {
+                        question: "In quale continente si trova il deserto del Sahara?",
+                        options: ["Asia", "Africa", "Sud America", "Australia"],
+                        answer: 1,
+                        explanation: "Il Sahara è il più grande deserto caldo del mondo e si trova in Africa."
+                    },
+                    {
+                        question: "Quale di questi paesi non fa parte dell'Unione Europea?",
+                        options: ["Svezia", "Norvegia", "Francia", "Germania"],
+                        answer: 1,
+                        explanation: "La Norvegia non fa parte dell'UE, pur essendo membro dello Spazio Economico Europeo."
+                    },
+                    {
+                        question: "Qual è la montagna più alta del mondo?",
+                        options: ["K2", "Monte Everest", "Kilimangiaro", "Monte Bianco"],
+                        answer: 1,
+                        explanation: "Il Monte Everest, con i suoi 8.848 metri, è la montagna più alta sopra il livello del mare."
+                    }
+                ]
+            },
+            scienza: {
+                title: "Quiz di Scienza",
+                icon: "fas fa-atom",
+                questions: [
+                    {
+                        question: "Qual è l'elemento chimico con simbolo 'O'?",
+                        options: ["Oro", "Osmio", "Ossigeno", "Olio"],
+                        answer: 2,
+                        explanation: "O è il simbolo chimico dell'ossigeno, un elemento essenziale per la vita."
+                    },
+                    {
+                        question: "Quale pianeta è noto come il 'Pianeta Rosso'?",
+                        options: ["Venere", "Giove", "Marte", "Saturno"],
+                        answer: 2,
+                        explanation: "Marte è chiamato 'Pianeta Rosso' per il colore dato dall'ossido di ferro sulla sua superficie."
+                    },
+                    {
+                        question: "Quanti cromosomi ha un essere umano normalmente?",
+                        options: ["23", "46", "64", "32"],
+                        answer: 1,
+                        explanation: "Gli umani hanno 46 cromosomi (23 coppie) in ogni cellula somatica."
+                    },
+                    {
+                        question: "Quale scienziato formulò la teoria della relatività?",
+                        options: ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Nikola Tesla"],
+                        answer: 1,
+                        explanation: "Albert Einstein formulò la teoria della relatività ristretta (1905) e generale (1915)."
+                    },
+                    {
+                        question: "Quale gas è più abbondante nell'atmosfera terrestre?",
+                        options: ["Ossigeno", "Anidride carbonica", "Azoto", "Idrogeno"],
+                        answer: 2,
+                        explanation: "L'azoto costituisce circa il 78% dell'atmosfera terrestre."
+                    }
+                ]
+            },
+            arte: {
+                title: "Quiz di Arte",
+                icon: "fas fa-palette",
+                questions: [
+                    {
+                        question: "Chi ha dipinto la 'Gioconda'?",
+                        options: ["Michelangelo", "Raffaello", "Leonardo da Vinci", "Caravaggio"],
+                        answer: 2,
+                        explanation: "La Gioconda, o Monna Lisa, è il celebre ritratto di Leonardo da Vinci."
+                    },
+                    {
+                        question: "In quale città si trova il Museo del Prado?",
+                        options: ["Barcellona", "Madrid", "Valencia", "Siviglia"],
+                        answer: 1,
+                        explanation: "Il Museo del Prado, uno dei più importanti al mondo, si trova a Madrid."
+                    },
+                    {
+                        question: "Quale di queste è una scultura di Michelangelo?",
+                        options: ["La Pietà", "Il Pensatore", "Il Bacio", "Balloon Dog"],
+                        answer: 0,
+                        explanation: "La Pietà è una celebre scultura di Michelangelo che raffigura Maria con Gesù morto."
+                    },
+                    {
+                        question: "A quale movimento artistico apparteneva Vincent van Gogh?",
+                        options: ["Rinascimento", "Barocco", "Post-impressionismo", "Cubismo"],
+                        answer: 2,
+                        explanation: "Van Gogh è considerato un esponente del Post-impressionismo."
+                    },
+                    {
+                        question: "Quale architetto progettò la cupola di Santa Maria del Fiore a Firenze?",
+                        options: ["Michelangelo", "Brunelleschi", "Bernini", "Palladio"],
+                        answer: 1,
+                        explanation: "Filippo Brunelleschi progettò l'innovativa cupola del Duomo di Firenze."
+                    }
+                ]
+            }
+        };
+
+        // Database dei risultati (simulato)
+        let quizResults = {
+            storia: [
+
+            ],
+            geografia: [
+
+            ],
+            scienza: [
+
+            ],
+            arte: [
+
+            ]
+        };
+
+        // Variabili di stato
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+        let timeElapsed = 0;
+        let timerInterval = null;
+        let isAdminLoggedIn = false;
+        let currentEditingQuiz = null;
+
+        // Funzioni per il quiz
+        function startQuiz(quizId) {
+            currentQuiz = quizzes[quizId];
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuiz.questions.length).fill(null);
+            timeElapsed = 0;
+            
+            document.getElementById('homepage').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('results-container').style.display = 'none';
+            document.getElementById('admin-container').style.display = 'none';
+            
+            document.getElementById('quiz-title').innerHTML = `<i class="${currentQuiz.icon}"></i> ${currentQuiz.title}`;
+            
+            showQuestion();
+            updateProgressBar();
+            
+            // Avvia il timer
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function showQuestion() {
+            const questionContainer = document.getElementById('question-container');
+            const question = currentQuiz.questions[currentQuestionIndex];
+            
+            let html = `<div class="question-text">${question.question}</div>
+                <div class="options-grid">`;
+            
+            question.options.forEach((option, index) => {
+                const isSelected = userAnswers[currentQuestionIndex] === index ? 'selected' : '';
+                html += `
+                    <div class="option ${isSelected}" onclick="selectOption(${index})">
+                        <input type="radio" name="answer" value="${index}" 
+                               ${isSelected ? 'checked' : ''}>
+                        ${option}
+                    </div>`;
             });
+            
+            html += `</div>`;
+            questionContainer.innerHTML = html;
+            
+            document.getElementById('progress-text').textContent = 
+                `Domanda ${currentQuestionIndex + 1} di ${currentQuiz.questions.length}`;
+            
+            document.getElementById('prev-btn').style.display = currentQuestionIndex === 0 ? 'none' : 'flex';
+            document.getElementById('next-btn').style.display = currentQuestionIndex === currentQuiz.questions.length - 1 ? 'none' : 'flex';
+            document.getElementById('submit-btn').style.display = currentQuestionIndex === currentQuiz.questions.length - 1 ? 'flex' : 'none';
+        }
+
+        function selectOption(answerIndex) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[answerIndex].classList.add('selected');
+            userAnswers[currentQuestionIndex] = answerIndex;
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuiz.questions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+                updateProgressBar();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+                updateProgressBar();
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        function updateTimer() {
+            timeElapsed++;
+            const minutes = Math.floor(timeElapsed / 60).toString().padStart(2, '0');
+            const seconds = (timeElapsed % 60).toString().padStart(2, '0');
+            document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            
+            // Calcola il punteggio
+            score = 0;
+            let feedbackHtml = '';
+            
+            currentQuiz.questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.answer;
+                
+                if (isCorrect) score++;
+                
+                feedbackHtml += `
+                    <div class="feedback-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="feedback-icon">
+                            <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                        </div>
+                        <div>
+                            <strong>Domanda ${index + 1}:</strong> ${question.question}<br>
+                            <strong>La tua risposta:</strong> ${userAnswer !== null ? question.options[userAnswer] : 'Nessuna risposta'}<br>
+                            <strong>Risposta corretta:</strong> ${question.options[question.answer]}<br>
+                            ${question.explanation ? `<em>${question.explanation}</em>` : ''}
+                        </div>
+                    </div>`;
+            });
+            
+            // Salva il risultato (simulato)
+            const studentName = prompt("Inserisci il tuo nome per salvare il risultato:", "Studente");
+            if (studentName) {
+                const correctAnswers = currentQuiz.questions
+                    .map((q, i) => userAnswers[i] === q.answer ? i+1 : null)
+                    .filter(Boolean)
+                    .join(',');
+                
+                const result = {
+                    student: studentName,
+                    score: `${score}/${currentQuiz.questions.length}`,
+                    date: new Date().toISOString().split('T')[0],
+                    time: document.getElementById('timer').textContent,
+                    details: correctAnswers
+                };
+                
+                if (!quizResults[currentQuiz.title.toLowerCase().split(' ')[2]]) {
+                    quizResults[currentQuiz.title.toLowerCase().split(' ')[2]] = [];
+                }
+                quizResults[currentQuiz.title.toLowerCase().split(' ')[2]].push(result);
+            }
+            
+            // Mostra i risultati
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('results-container').style.display = 'block';
+            
+            const percentage = Math.round((score / currentQuiz.questions.length) * 100);
+            document.getElementById('score-value').textContent = `${score}/${currentQuiz.questions.length}`;
+            document.getElementById('feedback-list').innerHTML = feedbackHtml;
+            
+            const circle = document.querySelector('.progress-fill');
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            document.getElementById('percentage-score').textContent = `${percentage}%`;
+            
+            let message = "";
+            if (percentage >= 90) {
+                message = "Eccellente! Sei un vero esperto in questo argomento!";
+            } else if (percentage >= 70) {
+                message = "Ottimo lavoro! Hai una buona conoscenza dell'argomento.";
+            } else if (percentage >= 50) {
+                message = "Buono! Con un po' più di studio puoi migliorare ancora.";
+            } else {
+                message = "Continua a studiare! Puoi fare meglio la prossima volta.";
+            }
+            document.getElementById('score-message').textContent = message;
+        }
+
+        function goHome() {
+            document.getElementById('homepage').style.display = 'block';
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('results-container').style.display = 'none';
+            document.getElementById('admin-container').style.display = 'none';
+            
+            document.querySelectorAll('.topic-card').forEach((card, index) => {
+                card.classList.remove('fade-in');
+                void card.offsetWidth;
+                card.classList.add('fade-in');
+                card.style.animationDelay = `${index % 2 === 0 ? 0.1 : 0.2}s`;
+            });
+        }
+
+        // Funzioni per il pannello admin
+        document.getElementById('admin-toggle').addEventListener('click', function() {
+            document.getElementById('admin-menu').classList.toggle('show');
         });
+
+        function showAdminPanel() {
+            document.getElementById('homepage').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('results-container').style.display = 'none';
+            document.getElementById('admin-container').style.display = 'block';
+            
+            if (isAdminLoggedIn) {
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+            } else {
+                document.getElementById('admin-login').style.display = 'block';
+                document.getElementById('admin-content').style.display = 'none';
+            }
+            
+            document.getElementById('admin-menu').classList.remove('show');
+        }
+
+        function showLoginForm() {
+            showAdminPanel();
+            document.getElementById('admin-login').style.display = 'block';
+            document.getElementById('admin-content').style.display = 'none';
+            document.getElementById('admin-menu').classList.remove('show');
+        }
+
+        function adminLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Verifica semplice (in un'app reale usare autenticazione sicura)
+            if (username === "daniele di francesco" && password === "daniele") {
+                isAdminLoggedIn = true;
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                alert("Accesso effettuato con successo!");
+            } else {
+                alert("Username o password non validi!");
+            }
+        }
+
+        function logout() {
+            isAdminLoggedIn = false;
+            document.getElementById('username').value = "";
+            document.getElementById('password').value = "";
+            showLoginForm();
+            document.getElementById('admin-menu').classList.remove('show');
+        }
+
+        function showQuizManagement() {
+            document.getElementById('quiz-management').style.display = 'block';
+            document.getElementById('results-management').style.display = 'none';
+        }
+
+        function showResultsManagement() {
+            document.getElementById('quiz-management').style.display = 'none';
+            document.getElementById('results-management').style.display = 'block';
+        }
+
+        function loadQuizForEditing() {
+            const quizId = document.getElementById('quiz-select').value;
+            if (!quizId) {
+                document.getElementById('quiz-editor').style.display = 'none';
+                return;
+            }
+            
+            currentEditingQuiz = quizId;
+            const quiz = quizzes[quizId];
+            
+            let questionsHtml = '';
+            quiz.questions.forEach((q, index) => {
+                questionsHtml += `
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                        <div class="card-body">
+                            <h5>Domanda ${index + 1}</h5>
+                            <div class="form-group">
+                                <label class="form-label">Testo della domanda</label>
+                                <input type="text" class="form-control question-text" value="${q.question}" 
+                                       data-question-index="${index}">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Opzioni di risposta</label>
+                                ${q.options.map((opt, optIndex) => `
+                                    <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                        <input type="radio" name="correct-answer-${index}" ${optIndex === q.answer ? 'checked' : ''}
+                                               value="${optIndex}" style="margin-right: 0.5rem;">
+                                        <input type="text" class="form-control option-text" value="${opt}"
+                                               data-question-index="${index}" data-option-index="${optIndex}" style="flex: 1;">
+                                        <button class="btn btn-danger" onclick="removeOption(${index}, ${optIndex})" 
+                                                style="margin-left: 0.5rem;" ${q.options.length <= 2 ? 'disabled' : ''}>
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                `).join('')}
+                                <button class="btn btn-outline" onclick="addOption(${index})" style="margin-top: 0.5rem;">
+                                    <i class="fas fa-plus btn-icon"></i> Aggiungi Opzione
+                                </button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Spiegazione (opzionale)</label>
+                                <textarea class="form-control explanation" data-question-index="${index}" 
+                                          rows="2">${q.explanation || ''}</textarea>
+                            </div>
+                            
+                            <button class="btn btn-danger" onclick="removeQuestion(${index})" 
+                                    style="margin-top: 1rem;" ${quiz.questions.length <= 1 ? 'disabled' : ''}>
+                                <i class="fas fa-trash btn-icon"></i> Elimina Domanda
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('questions-list').innerHTML = questionsHtml;
+            document.getElementById('quiz-editor').style.display = 'block';
+        }
+
+        function addNewQuestion() {
+            if (!currentEditingQuiz) return;
+            
+            const newQuestion = {
+                question: "Nuova domanda",
+                options: ["Opzione 1", "Opzione 2"],
+                answer: 0,
+                explanation: ""
+            };
+            
+            quizzes[currentEditingQuiz].questions.push(newQuestion);
+            loadQuizForEditing();
+        }
+
+        function removeQuestion(index) {
+            if (!currentEditingQuiz || quizzes[currentEditingQuiz].questions.length <= 1) return;
+            
+            if (confirm("Sei sicuro di voler eliminare questa domanda?")) {
+                quizzes[currentEditingQuiz].questions.splice(index, 1);
+                loadQuizForEditing();
+            }
+        }
+
+        function addOption(questionIndex) {
+            if (!currentEditingQuiz) return;
+            
+            const newOption = `Nuova opzione ${quizzes[currentEditingQuiz].questions[questionIndex].options.length + 1}`;
+            quizzes[currentEditingQuiz].questions[questionIndex].options.push(newOption);
+            loadQuizForEditing();
+        }
+
+        function removeOption(questionIndex, optionIndex) {
+            if (!currentEditingQuiz || 
+                quizzes[currentEditingQuiz].questions[questionIndex].options.length <= 2) return;
+                
+            const question = quizzes[currentEditingQuiz].questions[questionIndex];
+            
+            // Se stiamo rimuovendo la risposta corretta, impostiamo la prima opzione come corretta
+            if (optionIndex === question.answer) {
+                question.answer = 0;
+            } else if (optionIndex < question.answer) {
+                question.answer--;
+            }
+            
+            question.options.splice(optionIndex, 1);
+            loadQuizForEditing();
+        }
+
+        function saveQuizChanges() {
+            if (!currentEditingQuiz) return;
+            
+            // Salva tutte le modifiche
+            const questionTexts = document.querySelectorAll('.question-text');
+            questionTexts.forEach(input => {
+                const index = parseInt(input.dataset.questionIndex);
+                quizzes[currentEditingQuiz].questions[index].question = input.value;
+            });
+            
+            const optionTexts = document.querySelectorAll('.option-text');
+            optionTexts.forEach(input => {
+                const qIndex = parseInt(input.dataset.questionIndex);
+                const oIndex = parseInt(input.dataset.optionIndex);
+                quizzes[currentEditingQuiz].questions[qIndex].options[oIndex] = input.value;
+            });
+            
+            const correctAnswers = document.querySelectorAll('[name^="correct-answer-"]:checked');
+            correctAnswers.forEach(radio => {
+                const name = radio.getAttribute('name');
+                const qIndex = parseInt(name.split('-')[2]);
+                const oIndex = parseInt(radio.value);
+                quizzes[currentEditingQuiz].questions[qIndex].answer = oIndex;
+            });
+            
+            const explanations = document.querySelectorAll('.explanation');
+            explanations.forEach(textarea => {
+                const index = parseInt(textarea.dataset.questionIndex);
+                quizzes[currentEditingQuiz].questions[index].explanation = textarea.value;
+            });
+            
+            alert("Modifiche salvate con successo!");
+        }
+
+        function loadQuizResults() {
+            const quizId = document.getElementById('results-quiz-select').value;
+            if (!quizId) {
+                document.getElementById('results-table').innerHTML = '';
+                return;
+            }
+            
+            const results = quizResults[quizId] || [];
+            let resultsHtml = '';
+            
+            results.forEach(result => {
+                resultsHtml += `
+                    <tr>
+                        <td>${result.student}</td>
+                        <td>${result.score}</td>
+                        <td>${result.date}</td>
+                        <td>${result.time}</td>
+                        <td>
+                            <button class="btn btn-outline" onclick="showResultDetails('${quizId}', '${result.student}')">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            document.getElementById('results-table').innerHTML = resultsHtml || 
+                '<tr><td colspan="5" class="text-center">Nessun risultato disponibile</td></tr>';
+        }
+
+        function showResultDetails(quizId, studentName) {
+            const result = quizResults[quizId].find(r => r.student === studentName);
+            if (!result) return;
+            
+            const quiz = quizzes[quizId];
+            const correctAnswers = result.details.split(',').map(Number);
+            
+            let detailsHtml = `<h4>Risultato di ${studentName} - ${quiz.title}</h4>`;
+            detailsHtml += `<p>Punteggio: ${result.score} - Tempo impiegato: ${result.time}</p>`;
+            detailsHtml += `<div style="max-height: 400px; overflow-y: auto;">`;
+            
+            quiz.questions.forEach((q, index) => {
+                const isCorrect = correctAnswers.includes(index + 1);
+                detailsHtml += `
+                    <div class="feedback-item ${isCorrect ? 'correct' : 'incorrect'}" style="margin-bottom: 1rem;">
+                        <div class="feedback-icon">
+                            <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                        </div>
+                        <div>
+                            <strong>Domanda ${index + 1}:</strong> ${q.question}<br>
+                            <strong>Risposta corretta:</strong> ${q.options[q.answer]}<br>
+                            ${q.explanation ? `<em>${q.explanation}</em>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            detailsHtml += `</div>`;
+            
+            alertify.alert(detailsHtml, function(){
+                // Callback dopo la chiusura dell'alert
+            }).set('title', 'Dettaglio Risultato').set('basic', true);
+        }
+
+        // Inizializzazione
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.admin-panel')) {
+                document.getElementById('admin-menu').classList.remove('show');
+            }
+        });
+
+        // Alertify per dialog personalizzati
+        const alertifyScript = document.createElement('script');
+        alertifyScript.src = 'https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js';
+        alertifyScript.onload = function() {
+            alertify.set('notifier','position', 'top-right');
+        };
+        document.head.appendChild(alertifyScript);
+        
+        const alertifyStyle = document.createElement('link');
+        alertifyStyle.rel = 'stylesheet';
+        alertifyStyle.href = 'https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css';
+        document.head.appendChild(alertifyStyle);
     </script>
 </body>
 </html>
