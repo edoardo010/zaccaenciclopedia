@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enciclopedia Chimica per Materie</title>
+    <title>Zaccaciclopedia</title>
     <style>
         :root {
             --primary: #0F172A;
@@ -27,6 +27,39 @@
             text-align: center;
             padding: 3rem 1rem;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
+        }
+
+        .search-bar {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 50px;
+            border: 2px solid var(--accent);
+            background: var(--secondary);
+            color: var(--text);
+            font-size: 1.1rem;
+            padding-right: 50px;
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--neon);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon);
         }
 
         .materia-section {
@@ -82,11 +115,79 @@
             margin-top: 1rem;
             display: inline-block;
             text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .article-content {
+            display: none;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--secondary);
+            border-radius: var(--radius);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            position: relative;
+            border: 1px solid var(--accent);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 101;
+        }
+
+        .article-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+            z-index: 102;
+        }
+
+        .close-btn:hover {
+            background: var(--neon);
+        }
+
+        #content-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 100;
+            backdrop-filter: blur(3px);
         }
 
         @media (max-width: 768px) {
             .articles-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .article-content {
+                padding: 1.5rem;
+                margin: 1rem;
             }
         }
     </style>
@@ -94,115 +195,135 @@
 </head>
 <body>
     <div class="header">
-        <h1>Enciclopedia Chimica</h1>
-        <p>Organizzata per materie</p>
+        <h1>Zaccaciclopedia</h1>
+        <p>Enciclopedia Multidisciplinare</p>
+        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Cerca articoli...">
+            <span class="search-icon">🔍</span>
+        </div>
     </div>
 
-    <!-- Sezione Chimica Generale -->
+    <!-- Sezione Latino -->
     <section class="materia-section">
-        <h2 class="materia-title">🧪 Chimica Generale</h2>
+        <h2 class="materia-title">📜 Latino</h2>
         <div class="articles-grid">
             <article class="article-card">
-                <h3 class="article-title">Struttura Atomica</h3>
-                <p class="article-desc">Teoria atomica moderna e modelli atomici</p>
-                <a href="#struttura-atomica" class="btn">Approfondisci</a>
+                <h3 class="article-title">Grammatica Latina</h3>
+                <p class="article-desc">Declinazioni, coniugazioni e sintassi</p>
+                <a href="#grammatica-latina" class="btn">Approfondisci</a>
             </article>
 
             <article class="article-card">
-                <h3 class="article-title">Tavola Periodica</h3>
-                <p class="article-desc">Organizzazione e proprietà periodiche</p>
-                <a href="#tavola-periodica" class="btn">Approfondisci</a>
+                <h3 class="article-title">Letteratura</h3>
+                <p class="article-desc">Autori classici e opere principali</p>
+                <a href="#letteratura-latina" class="btn">Approfondisci</a>
             </article>
 
             <article class="article-card">
-                <h3 class="article-title">Legami Chimici</h3>
-                <p class="article-desc">Ionici, covalenti e metallici</p>
-                <a href="#legami-chimici" class="btn">Approfondisci</a>
+                <h3 class="article-title">Etimologia</h3>
+                <p class="article-desc">Origine delle parole latine</p>
+                <a href="#etimologia" class="btn">Approfondisci</a>
             </article>
         </div>
     </section>
 
-    <!-- Sezione Fisica -->
-    <section class="materia-section">
-        <h2 class="materia-title">⚛️ Fisica</h2>
-        <div class="articles-grid">
-            <article class="article-card">
-                <h3 class="article-title">Termodinamica</h3>
-                <p class="article-desc">Leggi della termodinamica chimica</p>
-                <a href="#termodinamica" class="btn">Approfondisci</a>
-            </article>
+    <!-- Altre sezioni (Chimica, Fisica, ecc.) qui... -->
 
-            <article class="article-card">
-                <h3 class="article-title">Stati della Materia</h3>
-                <p class="article-desc">Solidi, liquidi, gas e plasmi</p>
-                <a href="#stati-materia" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Fluidi Non Newtoniani</h3>
-                <p class="article-desc">Proprietà e comportamenti speciali</p>
-                <a href="#fluidi-non-newtoniani" class="btn">Approfondisci</a>
-            </article>
+    <!-- Contenuti Latino -->
+    <div id="grammatica-latina" class="article-content">
+        <button class="close-btn">&times;</button>
+        <h2 class="content-title">Grammatica Latina</h2>
+        <div class="content-highlight">
+            <h3>Declinazioni</h3>
+            <ul>
+                <li>Prima declinazione (-a, -ae)</li>
+                <li>Seconda declinazione (-us, -um)</li>
+                <li>Terza declinazione (mista)</li>
+                <li>Quarta declinazione (-us)</li>
+                <li>Quinta declinazione (-es)</li>
+            </ul>
         </div>
-    </section>
+    </div>
 
-    <!-- Sezione Matematica/Stechiometria -->
-    <section class="materia-section">
-        <h2 class="materia-title">🧮 Stechiometria</h2>
-        <div class="articles-grid">
-            <article class="article-card">
-                <h3 class="article-title">Bilanciamento Reazioni</h3>
-                <p class="article-desc">Metodo redox e conservazione massa</p>
-                <a href="#bilanciamento" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Calcoli Stechiometrici</h3>
-                <p class="article-desc">Moli, rapporti e resa teorica</p>
-                <a href="#calcoli-stechiometrici" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Soluzioni</h3>
-                <p class="article-desc">Molarità e diluizioni</p>
-                <a href="#soluzioni" class="btn">Approfondisci</a>
-            </article>
+    <div id="letteratura-latina" class="article-content">
+        <button class="close-btn">&times;</button>
+        <h2 class="content-title">Letteratura Latina</h2>
+        <div class="content-highlight">
+            <h3>Autori Principali</h3>
+            <ul>
+                <li>Cicerone - Oratoria</li>
+                <li>Virgilio - Eneide</li>
+                <li>Ovidio - Metamorfosi</li>
+                <li>Seneca - Filosofia</li>
+            </ul>
         </div>
-    </section>
+    </div>
 
-    <!-- Sezione Laboratorio -->
-    <section class="materia-section">
-        <h2 class="materia-title">🔬 Laboratorio</h2>
-        <div class="articles-grid">
-            <article class="article-card">
-                <h3 class="article-title">Sicurezza</h3>
-                <p class="article-desc">Norme e dispositivi di protezione</p>
-                <a href="#sicurezza" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Strumentazione</h3>
-                <p class="article-desc">Becher, pipette, spettrofotometri</p>
-                <a href="#strumentazione" class="btn">Approfondisci</a>
-            </article>
-
-            <article class="article-card">
-                <h3 class="article-title">Esperimenti Base</h3>
-                <p class="article-desc">Titolazioni, sintesi, decomposizioni</p>
-                <a href="#esperimenti" class="btn">Approfondisci</a>
-            </article>
-        </div>
-    </section>
-
+    <!-- Script Integrato -->
     <script>
-        // Aggiungi qui gli script per la navigazione
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                // Implementa la logica per mostrare i contenuti dettagliati
-                console.log('Apri articolo:', this.getAttribute('href'));
+        // Funzionalità di ricerca
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().removeAccents();
+            
+            document.querySelectorAll('.article-card').forEach(card => {
+                const title = card.querySelector('.article-title').textContent.toLowerCase().removeAccents();
+                const desc = card.querySelector('.article-desc').textContent.toLowerCase().removeAccents();
+                
+                card.style.display = (title.includes(searchTerm) || desc.includes(searchTerm)) ? 'block' : 'none';
             });
         });
+
+        // Gestione apertura/chiusura articoli
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetContent = document.querySelector(targetId);
+                
+                document.querySelectorAll('.article-content').forEach(c => c.classList.remove('active'));
+                document.getElementById('content-overlay')?.remove();
+                
+                if(targetContent) {
+                    const overlay = document.createElement('div');
+                    overlay.id = 'content-overlay';
+                    document.body.appendChild(overlay);
+                    
+                    targetContent.classList.add('active');
+                    window.scrollTo({
+                        top: targetContent.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Funzioni di chiusura
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.classList.remove('active');
+                document.getElementById('content-overlay')?.remove();
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape') {
+                document.querySelectorAll('.article-content').forEach(c => c.classList.remove('active'));
+                document.getElementById('content-overlay')?.remove();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if(e.target.id === 'content-overlay') {
+                document.querySelectorAll('.article-content').forEach(c => c.classList.remove('active'));
+                e.target.remove();
+            }
+        });
+
+        // Supporto agli accenti
+        String.prototype.removeAccents = function() {
+            return this.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        };
     </script>
 </body>
 </html>
