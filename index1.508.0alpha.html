@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enciclopedia delle Scienze</title>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #09090b 0%, #18181b 100%);
+      --card-bg: #18181b; 
+      --accent: #22d3ee;
+      --accent2: #818cf8;
+      --accent3: #c084fc;
+      --text: #fafafa;
+      --text-secondary: #a1a1aa;
+      --border: rgba(63, 63, 70, 0.4);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Unbounded', system-ui;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    header {
+      padding: 6rem 0 4rem;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .bg-element {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      z-index: 0;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .bg-1 {
+      background: var(--accent);
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      left: 15%;
+      animation: float 8s ease-in-out infinite;
+    }
+    .bg-2 {
+      background: var(--accent2);
+      width: 250px;
+      height: 250px;
+      top: 50px;
+      right: 15%;
+      animation: float 7s ease-in-out infinite reverse;
+    }
+    .bg-3 {
+      background: var(--accent3);
+      width: 200px;
+      height: 200px;
+      bottom: -100px;
+      left: 50%;
+      animation: float 9s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-20px, 20px); }
+    }
+    h1 {
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 3rem;
+      letter-spacing: -3px;
+      line-height: 0.9;
+      transform: scale(0.94);
+      animation: scale 3s forwards cubic-bezier(0.5, 1, 0.89, 1);
+    }
+    @keyframes scale {
+      100% { transform: scale(1); }
+    }
+    .current-info {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      opacity: 0.7;
+    }
+    .search-wrapper {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .search-bar {
+      width: 100%;
+      padding: 1.8rem 2.5rem;
+      font-size: 1.2rem;
+      background: rgba(24, 24, 27, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      color: var(--text);
+      font-family: inherit;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      min-width: 200px;
+      flex: 2 1 300px;
+    }
+    .search-bar:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.1);
+      transform: scale(1.02);
+    }
+    .search-bar::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(450px, 100%), 1fr));
+      gap: 2.5rem;
+      padding: 2rem 0 4rem;
+      position: relative;
+      z-index: 3;
+    }
+    .article-card {
+      background: var(--card-bg);
+      border-radius: 40px;
+      padding: 3rem;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transform-origin: center;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                  filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      height: fit-content;
+    }
+    .article-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent, rgba(34, 211, 238, 0.1), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.7s;
+      pointer-events: none;
+    }
+    .article-card:hover::before {
+      transform: translateX(100%);
+    }
+    .article-card:hover {
+      transform: scale(1.03) translateY(-10px);
+      border-color: var(--accent);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .has-active-article .article-card:not(.active) {
+      filter: blur(10px) brightness(0.5);
+      pointer-events: none;
+      transform: scale(0.98);
+    }
+    .has-active-article .bg-element {
+      filter: blur(90px) brightness(0.5);
+      opacity: 0.1;
+    }
+    .article-card.active {
+      grid-column: 1 / -1;
+      transform: scale(1) !important;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 100;
+      filter: brightness(1);
+      backdrop-filter: none;
+      background: var(--card-bg);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      cursor: default;
+    }
+    .article-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: all 0.3s ease;
+    }
+    .article-desc {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+    .article-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text);
+      font-size: 1.1rem;
+      line-height: 1.9;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+    .article-card.active .article-content {
+      max-height: none;
+      opacity: 1;
+      margin-top: 2.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border);
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .article-metadata {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      opacity: 0.7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .article-category-label {
+      font-size: 0.9em;
+      font-weight: 600;
+      color: var(--accent2);
+      background: rgba(129, 140, 248, 0.1);
+      border-radius: 12px;
+      padding: 0.2em 0.8em;
+      letter-spacing: 0.5px;
+      display: inline-block;
+    }
+    .article-map, .article-sim {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 2rem auto;
+      border-radius: 18px;
+      box-shadow: 0 4px 36px #0002;
+      border: 1px solid var(--border);
+    }
+    .article-sim {
+      min-height: 320px;
+      width: 100%;
+      max-width: 600px;
+      aspect-ratio: 16/9;
+      background: #222;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border: 2px solid var(--accent2);
+    }
+    .custom-dna-3d-container {
+      width: 100%;
+      max-width: 600px;
+      aspect-ratio: 16/9;
+      min-height: 320px;
+      margin: 2rem auto;
+      border-radius: 18px;
+      background: #18181b;
+      border: 2px solid var(--accent2);
+      box-shadow: 0 4px 36px #0002;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @media (max-width: 900px) {
+      .article-sim, .custom-dna-3d-container {
+        min-height: 220px;
+        max-width: 100%;
+        aspect-ratio: 16/9;
+      }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0 0.3rem; }
+      h1 { font-size: clamp(2rem, 8vw, 3rem); margin-bottom: 1.2rem; }
+      .article-card { padding: 1rem; border-radius: 18px; }
+      .article-title { font-size: 1.1rem; }
+      .search-bar { padding: 1rem 1.2rem; font-size: 1rem; }
+      .bg-element { opacity: 0.08; }
+      .search-wrapper { flex-direction: column; gap: 0.7rem; }
+      .article-sim, .custom-dna-3d-container { min-height: 160px; }
+    }
+    canvas.dna3d {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+      background: #222;
+      cursor: grab;
+      outline: none;
+      border-radius: 18px;
+    }
+    .dna3d-tooltip {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      background: rgba(24,24,27,0.92);
+      color: #fafafa;
+      border-radius: 10px;
+      padding: 0.45em 1em;
+      font-size: 1em;
+      pointer-events: none;
+      z-index: 2;
+      font-family: 'Unbounded', system-ui;
+      box-shadow: 0 2px 14px #0003;
+      opacity: 0.92;
+    }
+    .close-btn {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="mainContainer">
+    <div class="bg-1 bg-element"></div>
+    <div class="bg-2 bg-element"></div>
+    <div class="bg-3 bg-element"></div>
+    <header>
+      <h1>ENCICLOPEDIA</h1>
+      <div class="current-info">
+        Utente: edoardo010 | Data: 2025-05-30 11:35:51 UTC
+      </div>
+      <div class="search-wrapper">
+        <input type="text" class="search-bar" id="searchBar" placeholder="Cerca tra gli articoli..." />
+      </div>
+    </header>
+    <main>
+      <div class="articles-grid" id="articlesGrid"></div>
+    </main>
+  </div>
+  <!-- Three.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.min.js"></script>
+<script>
+const articles = [
+  {
+    title: "Il DNA e la doppia elica 3D (interattiva)",
+    category: "Scienze",
+    desc: "Struttura tridimensionale del DNA: esplora la doppia elica in 3D.",
+    date: "2025-05-30 11:35:51",
+    author: "edoardo010",
+    content: `
+      <p>
+        Il DNA (acido desossiribonucleico) è la molecola che contiene le istruzioni genetiche di tutti gli organismi viventi.<br>
+        La sua struttura è una doppia elica formata da due filamenti avvolti uno sull'altro, tenuti insieme da legami idrogeno tra basi azotate complementari (adenina-timina, citosina-guanina).
+      </p>
+      <img class="article-map" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/DNA_double_helix_horizontal.png" alt="DNA doppia elica">
+      <div class="custom-dna-3d-container">
+        <canvas class="dna3d"></canvas>
+        <div class="dna3d-tooltip">
+          Trascina per ruotare &ndash; Rotellina per zoom
+        </div>
+      </div>
+      <p style="text-align:center;font-size:0.95em;color:var(--text-secondary)">
+        Modello 3D interattivo: doppia elica di DNA (semplificato)<br>
+        <span style="font-size:0.85em;">Realizzato con <a href="https://threejs.org/" target="_blank" rel="noopener" style="color:#818cf8">Three.js</a></span>
+      </p>
+    `
+  },
+  {
+    title: "Celle e Organismi Viventi",
+    category: "Scienze",
+    desc: "Struttura della cellula e funzioni fondamentali negli esseri viventi.",
+    date: "2025-05-30 11:35:51",
+    author: "edoardo010",
+    content: `
+      <p>
+        Tutti gli organismi viventi sono composti da cellule. Le cellule possono essere:
+        <ul>
+          <li><b>Procariote:</b> senza nucleo definito (batteri)</li>
+          <li><b>Eucariote:</b> con nucleo (animali e piante)</li>
+        </ul>
+        Le principali parti di una cellula eucariote:
+        <ul>
+          <li><b>Membrana cellulare</b>: regola gli scambi con l'esterno</li>
+          <li><b>Nucleo</b>: contiene il DNA</li>
+          <li><b>Citosol e organuli</b>: svolgono varie funzioni (respirazione, sintesi proteica...)</li>
+        </ul>
+      </p>
+      <img class="article-map" src="https://upload.wikimedia.org/wikipedia/commons/1/17/Animal_Cell_Organelles_it.svg" alt="Mappa cellula animale">
+      <div class="sim-interactive" data-iframe="https://learn.genetics.utah.edu/content/cells/scale/"
+        data-link="https://learn.genetics.utah.edu/content/cells/scale/"
+        data-title="Cell Size and Scale Interactive"></div>
+      <p style="text-align:center;font-size:0.95em;color:var(--text-secondary)">Simulazione interattiva: dimensione e scala delle cellule (<a href="https://learn.genetics.utah.edu/content/cells/scale/" target="_blank" rel="noopener">Learn Genetics - University of Utah</a>, solo in inglese)</p>
+    `
+  },
+  {
+    title: "Meccanica Classica",
+    category: "Fisica",
+    desc: "Fondamenti del moto dei corpi: leggi, principi e applicazioni.",
+    date: "2025-05-30 11:35:51",
+    author: "edoardo010",
+    content: `
+      <p>
+        La meccanica classica studia il moto dei corpi e le forze che li causano, secondo i principi formulati da Newton.<br>
+        <b>Le tre leggi di Newton:</b>
+        <ol>
+          <li><b>Inerzia:</b> un corpo mantiene il suo stato di quiete o moto rettilineo uniforme se non agiscono forze esterne.</li>
+          <li><b>F=ma:</b> la forza è uguale alla massa per l'accelerazione.</li>
+          <li><b>Principio di azione e reazione:</b> a ogni azione corrisponde una reazione uguale e contraria.</li>
+        </ol>
+        <b>Concetti chiave:</b>
+        <ul>
+          <li>Quantità di moto e conservazione</li>
+          <li>Energia cinetica e potenziale</li>
+          <li>Applicazioni: pendolo, piani inclinati, collisioni</li>
+        </ul>
+      </p>
+      <img class="article-map" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Newtonian_mechanics_concept_map.png" alt="Mappa concettuale meccanica classica">
+      <div class="sim-interactive" data-iframe="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_it.html"
+        data-link="https://phet.colorado.edu/it/simulation/forces-and-motion-basics"
+        data-title="PhET Forze e Moto"></div>
+      <p style="text-align:center;font-size:0.95em;color:var(--text-secondary)">Simulazione interattiva: esplora le forze e il moto (<a href="https://phet.colorado.edu/it/simulation/forces-and-motion-basics" target="_blank" rel="noopener">PhET</a>)</p>
+    `
+  },
+  {
+    title: "Onde e Ottica",
+    category: "Fisica",
+    desc: "Le onde e la natura della luce: fenomeni e simulazioni.",
+    date: "2025-05-30 11:35:51",
+    author: "edoardo010",
+    content: `
+      <p>
+        Le onde sono perturbazioni che si propagano trasportando energia. L'ottica studia il comportamento della luce, sia come onda sia come particella.<br>
+        <b>Tipi di onde:</b>
+        <ul>
+          <li>Meccaniche (suono, onde su una corda)</li>
+          <li>Elettromagnetiche (luce, onde radio)</li>
+          <li>Trasversali e longitudinali</li>
+        </ul>
+        <b>Fenomeni ottici:</b>
+        <ul>
+          <li>Riflessione</li>
+          <li>Rifrazione</li>
+          <li>Diffrazione</li>
+          <li>Interferenza</li>
+        </ul>
+      </p>
+      <img class="article-map" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Wave_types.png" alt="Tipi di onde fisica">
+      <img class="article-map" src="https://upload.wikimedia.org/wikipedia/commons/1/13/Refraction_reflection.png" alt="Riflessione e rifrazione della luce">
+      <div class="sim-interactive" data-iframe="https://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_it.html"
+        data-link="https://phet.colorado.edu/it/simulation/wave-on-a-string"
+        data-title="PhET Onda su una corda"></div>
+      <p style="text-align:center;font-size:0.95em;color:var(--text-secondary)">Simulazione interattiva: crea onde su una corda (<a href="https://phet.colorado.edu/it/simulation/wave-on-a-string" target="_blank" rel="noopener">PhET</a>)</p>
+    `
+  }
+];
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function renderArticles(list) {
+  const grid = document.getElementById('articlesGrid');
+  grid.innerHTML = '';
+  list.forEach((article) => {
+    const card = document.createElement('div');
+    card.className = 'article-card';
+    const formattedDate = new Date(article.date).toLocaleString('it-IT', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZone: 'UTC'
+    });
+    card.innerHTML = `
+      <div class="article-metadata">
+        <span>Creato il ${formattedDate} UTC da ${article.author}</span>
+        <span class="article-category-label">${article.category || ''}</span>
+      </div>
+      <h2 class="article-title">${article.title}</h2>
+      <p class="article-desc">${article.desc}</p>
+      <div class="article-content">${article.content}</div>
+    `;
+    grid.appendChild(card);
+
+    card.addEventListener('click', (e) => {
+      const wasActive = card.classList.contains('active');
+      document.querySelectorAll('.article-card').forEach(c => {
+        if (c !== card) c.classList.remove('active');
+      });
+      card.classList.toggle('active');
+      grid.classList.toggle('has-active-article', !wasActive);
+
+      if(card.classList.contains('active')) {
+        loadInteractiveSims(card);
+        loadCustomDNA3D(card);
+      }
+    });
+  });
+}
+
+function loadInteractiveSims(card) {
+  card.querySelectorAll('.sim-interactive').forEach(function(wrapper) {
+    if (wrapper.dataset.loaded === "1") return;
+    wrapper.dataset.loaded = "1";
+    const src = wrapper.getAttribute('data-iframe');
+    const title = wrapper.getAttribute('data-title') || 'Simulazione interattiva';
+    const iframe = document.createElement('iframe');
+    iframe.className = "article-sim";
+    iframe.src = src;
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.title = title;
+    iframe.frameBorder = "0";
+    iframe.scrolling = "no";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    iframe.style.display = "block";
+    wrapper.innerHTML = ""; // pulisci
+    wrapper.appendChild(iframe);
+  });
+}
+
+function loadCustomDNA3D(card) {
+  card.querySelectorAll('.custom-dna-3d-container').forEach(function(container) {
+    if (container.dataset.loaded === "1") return;
+    container.dataset.loaded = "1";
+    const canvas = container.querySelector("canvas.dna3d");
+    while (container.children.length > 2) container.removeChild(container.lastChild);
+
+    function getSize() {
+      return [container.clientWidth, container.clientHeight];
+    }
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#18181b");
+    let [w, h] = getSize();
+    const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);
+    camera.position.set(0, 0, 36);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
+    renderer.setClearColor("#18181b");
+    renderer.setSize(w, h, false);
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
+    dirLight.position.set(10, 16, 12);
+    scene.add(dirLight);
+
+    const basePairs = 18;
+    const turns = 1.5;
+    const radius = 4, pitch = 6;
+    const pointsPerHelix = basePairs * 14;
+    const materialA = new THREE.MeshPhongMaterial({ color: "#22d3ee", shininess: 60 });
+    const materialB = new THREE.MeshPhongMaterial({ color: "#c084fc", shininess: 60 });
+    const backboneMat = new THREE.MeshPhongMaterial({ color: "#fff", shininess: 60 });
+    const group = new THREE.Group();
+
+    for (let i = 0; i < 2; i++) {
+      const helixPoints = [];
+      for (let t = 0; t < pointsPerHelix; t++) {
+        const theta = (t / pointsPerHelix) * turns * Math.PI * 2;
+        const y = (t / pointsPerHelix) * pitch * turns - (pitch * turns)/2;
+        const angle = theta + (i === 0 ? 0 : Math.PI);
+        helixPoints.push(new THREE.Vector3(
+          Math.cos(angle) * radius,
+          y,
+          Math.sin(angle) * radius
+        ));
+      }
+      const curve = new THREE.CatmullRomCurve3(helixPoints);
+      const tube = new THREE.TubeGeometry(curve, 180, 0.27, 8, false);
+      group.add(new THREE.Mesh(tube, backboneMat));
+    }
+
+    for (let n = 0; n < basePairs; n++) {
+      const f = n / (basePairs - 1);
+      const theta = f * turns * Math.PI * 2;
+      const y = f * pitch * turns - (pitch * turns)/2;
+      const x1 = Math.cos(theta) * radius;
+      const z1 = Math.sin(theta) * radius;
+      const x2 = Math.cos(theta + Math.PI) * radius;
+      const z2 = Math.sin(theta + Math.PI) * radius;
+      const from = new THREE.Vector3(x1, y, z1);
+      const to = new THREE.Vector3(x2, y, z2);
+      const dir = new THREE.Vector3().subVectors(to, from);
+      const length = dir.length();
+      const geometry = new THREE.CylinderGeometry(0.19, 0.19, length, 14);
+      geometry.translate(0, length / 2, 0);
+      const mat = n % 2 === 0 ? materialA : materialB;
+      const mesh = new THREE.Mesh(geometry, mat);
+      mesh.position.copy(from);
+      mesh.lookAt(to);
+      mesh.rotateX(Math.PI/2);
+      group.add(mesh);
+    }
+
+    scene.add(group);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.14;
+    controls.enablePan = false;
+    controls.minDistance = 12;
+    controls.maxDistance = 50;
+    controls.target.set(0,0,0);
+    controls.update();
+
+    function resize() {
+      let [w, h] = getSize();
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener("resize", resize);
+
+    setTimeout(resize, 100);
+    setTimeout(resize, 300);
+
+    function animate() {
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+  });
+}
+
+function filterArticles(query) {
+  const q = query.toLowerCase().trim();
+  renderArticles(
+    articles.filter(a =>
+      a.title.toLowerCase().includes(q) ||
+      a.desc.toLowerCase().includes(q) ||
+      a.content.toLowerCase().includes(q)
+    )
+  );
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderArticles(articles);
+  const searchBar = document.getElementById('searchBar');
+  searchBar.addEventListener('input', debounce((e) => {
+    filterArticles(e.target.value);
+  }, 300));
+});
+</script>
+</body>
+</html>
