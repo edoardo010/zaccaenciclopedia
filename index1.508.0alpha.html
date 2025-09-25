@@ -518,7 +518,67 @@ const articles = [
       Simulazione interattiva: esplora le leggi dei gas (<a href="https://phet.colorado.edu/it/simulation/gas-laws" target="_blank" style="color:#818cf8">PhET Colorado</a>)
     </p>
   `
- }
+ },
+{
+  title: "Termodinamica e Gas",
+  category: "Fisica",
+  desc: "Scopri le leggi dei gas e la termodinamica, teoria e simulazione.",
+  date: "2025-09-25 15:06:08",
+  author: "edoardo010",
+  content: `
+    <p>
+      La <b>termodinamica</b> è la branca della fisica che studia le relazioni tra calore, lavoro, temperatura ed energia.<br>
+      I principi della termodinamica descrivono come l'energia si trasforma e come si comportano le particelle in diversi sistemi.
+    </p>
+    <h3>Principi fondamentali della termodinamica</h3>
+    <ul>
+      <li><b>Primo principio (conservazione dell'energia):</b> L'energia totale di un sistema isolato si conserva. Il calore fornito a un sistema può essere utilizzato per aumentare l'energia interna o per compiere lavoro. <br><i>ΔU = Q - L</i>, dove ΔU è la variazione di energia interna, Q il calore assorbito, L il lavoro compiuto.</li>
+      <li><b>Secondo principio (entropia):</b> L'entropia (disordine) di un sistema isolato tende ad aumentare nel tempo. Non è possibile trasformare tutto il calore in lavoro utile.</li>
+      <li><b>Terzo principio:</b> L'entropia di un sistema si avvicina a zero quando la temperatura si avvicina allo zero assoluto.</li>
+    </ul>
+    <h3>Le leggi dei gas ideali</h3>
+    <ul>
+      <li><b>Legge di Boyle:</b> A temperatura costante, il volume di un gas è inversamente proporzionale alla pressione (<i>p × V = costante</i>).</li>
+      <li><b>Legge di Charles:</b> A pressione costante, il volume di un gas è direttamente proporzionale alla temperatura (<i>V/T = costante</i>).</li>
+      <li><b>Legge di Gay-Lussac:</b> A volume costante, la pressione di un gas è direttamente proporzionale alla temperatura (<i>p/T = costante</i>).</li>
+      <li><b>Legge di Avogadro:</b> A pressione e temperatura costanti, il volume di un gas è direttamente proporzionale al numero di molecole (<i>V/n = costante</i>).</li>
+    </ul>
+    <b>Equazione di stato dei gas ideali:</b>
+    <div style="font-size:1.2em; margin:0.5em 0; text-align:center;">
+      <i>p × V = n × R × T</i>
+    </div>
+    <p>
+      Dove:
+      <ul>
+        <li><b>p</b> = pressione (Pa)</li>
+        <li><b>V</b> = volume (m³)</li>
+        <li><b>n</b> = quantità di sostanza (mol)</li>
+        <li><b>R</b> = costante universale dei gas (8.314 J/mol·K)</li>
+        <li><b>T</b> = temperatura assoluta (K)</li>
+      </ul>
+    </p>
+    <h3>Concetti chiave</h3>
+    <ul>
+      <li><b>Energia interna:</b> Somma delle energie cinetiche e potenziali delle particelle che compongono un sistema.</li>
+      <li><b>Trasformazioni termodinamiche:</b>
+        <ul>
+          <li><i>Isoterma</i>: temperatura costante</li>
+          <li><i>Isobara</i>: pressione costante</li>
+          <li><i>Isocora</i>: volume costante</li>
+          <li><i>Adiabatica</i>: senza scambio di calore con l'esterno</li>
+        </ul>
+      </li>
+    </ul>
+    <img class="article-map" src="https://upload.wikimedia.org/wikipedia/commons/1/16/Ideal_gas_law_diagram.svg" alt="Diagramma legge dei gas ideali">
+    <div class="sim-interactive"
+      data-iframe="https://phet.colorado.edu/sims/html/gas-properties/latest/gas-properties_it.html"
+      data-link="https://phet.colorado.edu/it/simulation/gas-properties"
+      data-title="PhET Proprietà dei Gas"></div>
+    <p style="text-align:center;font-size:0.95em;color:var(--text-secondary)">
+      Simulazione interattiva: osserva il comportamento delle molecole di gas (<a href="https://phet.colorado.edu/it/simulation/gas-properties" target="_blank" style="color:#818cf8">PhET Colorado</a>)
+    </p>
+  `
+}
 ];
 
 function debounce(func, wait) {
